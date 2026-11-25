@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sólidos de revolución · Cálculo Integral</title>
+<style>
+:root{--bg:#f4f5f7;--paper:#fff;--ink:#101828;--muted:#5a6472;--line:#d9dde3;--ac:#1f3fbf;--soft:#e9edff;--op:#eef0f4;--bad:#b42318;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1117;--paper:#151b24;--ink:#e8ecf2;--muted:#98a2b3;--line:#2a3340;--ac:#8aa4ff;--soft:#1c2745;--op:#1d2531;--bad:#ff8a80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1117;--paper:#151b24;--ink:#e8ecf2;--muted:#98a2b3;--line:#2a3340;--ac:#8aa4ff;--soft:#1c2745;--op:#1d2531;--bad:#ff8a80;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Times New Roman",Times,"Liberation Serif","Segoe UI Symbol",serif;font-size:17px;line-height:1.4}
+button,input{font:inherit;color:inherit}
+.hidden{display:none!important}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.lnk{background:none;border:0;padding:0;cursor:pointer;background-image:linear-gradient(var(--ac),var(--ac));background-size:0 1px;background-position:0 100%;background-repeat:no-repeat;transition:background-size .25s,color .2s}
+.lnk:hover{background-size:100% 1px;color:var(--ac)}
+.fi{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:4px;background:var(--paper);font-size:1.25rem;transition:border-color .15s,box-shadow .15s}
+.fi:hover{border-color:var(--muted)}
+.fi:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px var(--soft)}
+.fi.bad{border-color:var(--bad)}
+.go{width:100%;padding:13px;background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:4px;font-size:1.12rem;cursor:pointer;transition:background .2s,border-color .2s,transform .15s}
+.go:hover{background:var(--ac);border-color:var(--ac);transform:translateY(-1px)}
+.go:active{transform:none}
+.msg{color:var(--bad);min-height:1.4em;margin:8px 0 0;font-size:.95rem}
+label{display:block;font-style:italic;color:var(--muted);margin-bottom:4px}
+/* Acceso */
+#login{min-height:100vh;display:grid;grid-template-columns:1.15fr 1fr}
+.hero{padding:clamp(28px,7vw,88px);display:flex;flex-direction:column;justify-content:center;background:var(--paper);border-right:1px solid var(--line)}
+.hero h1{font-size:clamp(2.3rem,5.5vw,4rem);line-height:1.05;margin:0 0 16px;font-weight:700;letter-spacing:-.5px}
+.hero>p{max-width:34ch;color:var(--muted);font-size:1.15rem;margin:0 0 28px}
+.fm{display:grid;gap:0;max-width:440px}
+.fm div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--line);font-style:italic;transition:padding .2s,color .2s}
+.fm div:hover{padding-left:8px;color:var(--ac)}
+.fm span{font-style:normal;color:var(--muted)}
+.side{display:grid;place-items:center;padding:28px}
+.box{width:100%;max-width:360px}
+.box h2{margin:0 0 4px;font-size:1.6rem}
+.box p{color:var(--muted);margin:0 0 18px}
+.box label{margin-top:12px}
+.box .go{margin-top:16px}
+.hint{font-size:.95rem;margin:16px 0 0!important}
+@media (max-width:860px){#login{grid-template-columns:1fr}.hero{border-right:0;border-bottom:1px solid var(--line)}}
+/* App */
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 24px;border-bottom:1px solid var(--line);background:var(--paper)}
+.mark{font-size:1.4rem;font-weight:700}
+.mark small{font-weight:400;font-style:italic;color:var(--muted);font-size:1rem;margin-left:10px}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr) 430px;gap:24px;padding:24px;max-width:1440px;margin:0 auto;align-items:start}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:4px}
+.fig{position:relative}
+#plot{height:calc(100dvh - 260px);min-height:420px}
+.help{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--paper);cursor:pointer;font-size:1.1rem;z-index:3;transition:background .2s,border-color .2s}
+.help:hover{background:var(--soft);border-color:var(--ac)}
+#hb{position:absolute;top:54px;right:12px;max-width:320px;background:var(--paper);border:1px solid var(--ac);border-radius:4px;padding:12px 14px;font-size:.95rem;z-index:3}
+#hb p{margin:0 0 6px}
+.res{margin-top:16px;padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.res .v{font-size:2rem;font-weight:700;line-height:1.1}
+.res .s{color:var(--muted)}
+.res .r{text-align:right;font-style:italic;color:var(--muted)}
+.res .r b{display:block;font-style:normal;color:var(--ink);font-weight:400}
+.panel{padding:6px 20px 20px}
+.sec{padding-top:16px;margin-top:16px;border-top:1px solid var(--line)}
+.sec:first-child{border-top:0;margin-top:0}
+.sec h3{margin:0 0 10px;font-size:1.1rem;display:flex;gap:10px;align-items:baseline}
+.sec h3 i{color:var(--ac);font-weight:400;min-width:1.5em}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:9px 12px;margin-bottom:6px;border:1px solid var(--line);background:var(--paper);border-radius:4px;cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
+.opt:hover{border-color:var(--ac);background:var(--soft);transform:translateX(3px)}
+.opt .l{flex:none;width:28px;height:28px;display:grid;place-items:center;border:1px solid var(--line);border-radius:4px;font-size:.95rem;transition:all .15s}
+.opt small{display:block;color:var(--muted);font-size:.9rem;line-height:1.2}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:var(--soft)}
+.opt[aria-pressed="true"] .l{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f1{margin-bottom:10px}
+#keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.k{height:44px;border:1px solid var(--line);background:var(--paper);border-radius:4px;font-size:1.25rem;cursor:pointer;transition:border-color .15s,background .15s,transform .12s}
+.k:hover{border-color:var(--ac);background:var(--soft);transform:translateY(-1px)}
+.k:active{transform:scale(.96)}
+.k.fn{color:var(--ac)}.k.op{background:var(--op)}.k.var{font-style:italic}.k.del{color:var(--bad)}
+@media (max-width:860px){
+ .top{padding:12px 16px}.mark small{display:none}
+ .wrap{display:block;padding:12px}
+ #plot{height:46vh;min-height:300px}
+ .panel{margin-top:16px}
+ .k{height:46px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <div class="hero">
+    <h1>Sólidos de revolución</h1>
+    <p>Visualiza en 3D y calcula el volumen de un sólido generado al girar una curva.</p>
+    <div class="fm">
+      <div>Discos <span>V = π ∫ [f(x)]² dx</span></div>
+      <div>Arandelas <span>V = π ∫ ([f(x)]² − [g(x)]²) dx</span></div>
+      <div>Cascarones <span>V = 2π ∫ x·f(x) dx</span></div>
+    </div>
+  </div>
+  <div class="side">
+    <div class="box" id="lf">
+      <h2>Iniciar sesión</h2>
+      <p>Cálculo Integral</p>
+      <label for="u">Usuario</label>
+      <input class="fi" id="u" autocomplete="off">
+      <label for="p">Contraseña</label>
+      <input class="fi" id="p" type="password" autocomplete="off">
+      <p class="msg" id="lm" role="alert"></p>
+      <button class="go" type="button" id="enter">Entrar</button>
+      <p class="hint">Cuenta de prueba: <b>admin</b> / <b>admin123</b></p>
+    </div>
+  </div>
+</section>
+
+<section id="app" class="hidden">
+  <div class="top"><div class="mark">Sólidos de revolución<small>Cálculo Integral</small></div><button class="lnk" id="out">Cerrar sesión</button></div>
+  <div class="wrap">
+    <div>
+      <div class="card fig">
+        <div id="plot" aria-label="Gráfica 3D del sólido"></div>
+        <button class="help" id="help" aria-label="Ayuda">?</button>
+        <div id="hb" class="hidden">
+          <p>Toca un campo y escribe con el teclado.</p>
+          <p>El botón √ abre una raíz: escribe lo de adentro y sigue después del paréntesis.</p>
+          <p>Arrastra para girar el sólido; acerca con la rueda o pellizcando.</p>
+        </div>
+      </div>
+      <div class="card res">
+        <div><div class="v" id="rv">V = —</div><div class="s" id="rs">Pulsa Graficar para calcular.</div></div>
+        <div class="r"><b id="rc"></b><span id="rf"></span></div>
+      </div>
+    </div>
+    <div class="card panel">
+      <div class="sec">
+        <h3><i>01</i> Método</h3>
+        <button class="opt" data-m="disk" aria-pressed="true"><span class="l">A</span><span>Discos<small>Giro alrededor del eje X</small></span></button>
+        <button class="opt" data-m="washer" aria-pressed="false"><span class="l">B</span><span>Arandelas<small>Región entre dos curvas, eje X</small></span></button>
+        <button class="opt" data-m="shell" aria-pressed="false"><span class="l">C</span><span>Cascarones cilíndricos<small>Giro alrededor del eje Y</small></span></button>
+      </div>
+      <div class="sec">
+        <h3><i>02</i> Función</h3>
+        <div class="f1"><label for="f" id="fl">f(x) =</label><input class="fi mi" id="f" inputmode="none" autocomplete="off" spellcheck="false"></div>
+        <div class="f1" id="gb"><label for="g">g(x) interior =</label><input class="fi mi" id="g" inputmode="none" autocomplete="off" spellcheck="false"></div>
+      </div>
+      <div class="sec">
+        <h3><i>03</i> Intervalo</h3>
+        <div class="two">
+          <div><label for="a">x desde</label><input class="fi mi" id="a" inputmode="none" autocomplete="off"></div>
+          <div><label for="b">hasta</label><input class="fi mi" id="b" inputmode="none" autocomplete="off"></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div id="keys"></div>
+        <p class="msg" id="err" role="alert"></p>
+        <button class="go" id="go" style="margin-top:6px">Graficar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.2/math.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var cur="disk",active=null,NAMES={disk:"Discos",washer:"Arandelas",shell:"Cascarones"};
+function setS(on){try{on?sessionStorage.setItem("ok","1"):sessionStorage.removeItem("ok")}catch(e){}}
+function hasS(){try{return sessionStorage.getItem("ok")==="1"}catch(e){return false}}
+function show(on){$("login").classList.toggle("hidden",on);$("app").classList.toggle("hidden",!on);if(on)setMethod("disk")}
+function tryLogin(){
+  if($("u").value.trim()==="admin"&&$("p").value==="admin123"){$("lm").textContent="";setS(true);show(true)}
+  else $("lm").textContent="Usuario o contraseña incorrectos."}
+$("enter").addEventListener("click",tryLogin);
+["u","p"].forEach(function(id){$(id).addEventListener("keydown",function(e){if(e.key==="Enter")tryLogin()})});
+$("out").addEventListener("click",function(){setS(false);$("p").value="";show(false)});
+$("help").addEventListener("click",function(){$("hb").classList.toggle("hidden")});
+
+var EX={disk:{f:"√(x)",g:"",a:"0",b:"4"},washer:{f:"x",g:"x²",a:"0",b:"1"},shell:{f:"−x²+4x",g:"",a:"0",b:"4"}};
+function setMethod(m){cur=m;
+  document.querySelectorAll(".opt").forEach(function(t){t.setAttribute("aria-pressed",String(t.dataset.m===m))});
+  var p=EX[m];$("f").value=p.f;$("g").value=p.g;$("a").value=p.a;$("b").value=p.b;
+  $("fl").textContent=m==="washer"?"f(x) exterior =":"f(x) =";
+  $("gb").classList.toggle("hidden",m!=="washer");
+  document.querySelectorAll(".mi").forEach(check);calc()}
+document.querySelectorAll(".opt").forEach(function(t){t.addEventListener("click",function(){setMethod(t.dataset.m)})});
+$("go").addEventListener("click",calc);
+
+var KEYS=[["√","√()",1,"fn","raíz"],["x²","²",0,"fn","al cuadrado"],["xⁿ","^()",1,"fn","potencia"],["π","π",0,"fn"],
+["sen","sen()",1,"fn"],["cos","cos()",1,"fn"],["eˣ","e^()",1,"fn","exponencial"],["ln","ln()",1,"fn","logaritmo natural"],
+["x","x",0,"var"],["(","(",0,"op"],[")",")",0,"op"],["÷","÷",0,"op","dividir"],
+["7","7"],["8","8"],["9","9"],["×","×",0,"op","multiplicar"],
+["4","4"],["5","5"],["6","6"],["−","−",0,"op","restar"],
+["1","1"],["2","2"],["3","3"],["+","+",0,"op"],
+["0","0"],[".",".",0],["⌫","bs",0,"del","borrar"],["C","clear",0,"del","limpiar campo"]];
+KEYS.forEach(function(k){var b=document.createElement("button");b.type="button";b.className="k "+(k[3]||"");b.textContent=k[0];b.setAttribute("aria-label",k[4]||k[0]);
+  b.addEventListener("click",function(){press(k)});$("keys").appendChild(b)});
+document.querySelectorAll(".mi").forEach(function(el){el.addEventListener("focus",function(){active=el});el.addEventListener("input",function(){check(el)})});
+active=$("f");
+function press(k){var el=active||$("f"),v=el.value,s=el.selectionStart,e=el.selectionEnd,pos;
+  if(s==null){s=e=v.length}
+  if(k[1]==="bs"){if(s!==e){el.value=v.slice(0,s)+v.slice(e);pos=s}else if(s>0){el.value=v.slice(0,s-1)+v.slice(e);pos=s-1}else pos=0}
+  else if(k[1]==="clear"){el.value="";pos=0}
+  else{el.value=v.slice(0,s)+k[1]+v.slice(e);pos=s+k[1].length-(k[2]||0)}
+  el.focus({preventScroll:true});el.setSelectionRange(pos,pos);check(el)}
+
+function norm(s){return s.replace(/[−–]/g,"-").replace(/×/g,"*").replace(/÷/g,"/").replace(/π/g,"pi").replace(/²/g,"^2").replace(/³/g,"^3")
+  .replace(/√\(/g,"sqrt(").replace(/√\s*([A-Za-z0-9.]+)/g,"sqrt($1)").replace(/\bsen\(/g,"sin(").replace(/\bln\(/g,"log(").replace(/\|([^|]+)\|/g,"abs($1)")}
+function check(el){var bad=false;try{if(el.value.trim()===""){bad=!(el.id==="g"&&cur!=="washer")}else if(el.id==="f"||el.id==="g")math.compile(norm(el.value));else math.evaluate(norm(el.value))}catch(e){bad=true}
+  el.classList.toggle("bad",bad)}
+function makeFn(src){if(!src.trim())throw new Error("Falta escribir la función.");var c=math.compile(norm(src));
+  return function(x){var v=c.evaluate({x:x});if(typeof v!=="number"||!isFinite(v))throw new Error("La función no es real o no está definida en x = "+(+x.toFixed(4))+".");return v}}
+function num(id,name){var v;try{v=math.evaluate(norm($(id).value))}catch(e){v=NaN}if(typeof v!=="number"||!isFinite(v))throw new Error("Revisa el valor de "+name+".");return v}
+function simpson(h,a,b,n){var dx=(b-a)/n,s=h(a)+h(b);for(var i=1;i<n;i++)s+=h(a+i*dx)*(i%2?4:2);return s*dx/3}
+function toFrac(v){if(Math.abs(v)<1e-12)return"0";var sg=v<0?-1:1,x=Math.abs(v),h1=1,h0=0,k1=0,k0=1,y=x;
+  for(var i=0;i<20;i++){var ai=Math.floor(y),h2=ai*h1+h0,k2=ai*k1+k0;h0=h1;h1=h2;k0=k1;k1=k2;
+    if(Math.abs(x-h1/k1)<1e-7*Math.max(1,x)&&k1<=2000)break;if(y-ai<1e-12)break;y=1/(y-ai)}
+  if(k1>2000||Math.abs(x-h1/k1)>1e-6*Math.max(1,x))return null;return(sg<0?"-":"")+h1+(k1===1?"":"/"+k1)}
+function exact(I){var fr=toFrac(I);if(fr===null)return null;if(fr==="0")return"0";var n=fr.split("/")[0],d=fr.split("/")[1];
+  if(n==="1")n="";if(n==="-1")n="-";return d?"("+n+"π)/"+d:n+"π"}
+
+function calc(){$("err").textContent="";
+  try{var m=cur,a=num("a","“x desde”"),b=num("b","“hasta”");
+    if(a>=b)throw new Error("El inicio debe ser menor que el final.");
+    if(m==="shell"&&a<0)throw new Error("En cascarones x es el radio: empieza en 0 o más.");
+    var f=makeFn($("f").value),g=m==="washer"?makeFn($("g").value):null,N=2000,I,fo;
+    if(m==="disk"){I=simpson(function(x){return Math.pow(f(x),2)},a,b,N);fo="V = π ∫ [f(x)]² dx"}
+    else if(m==="washer"){I=simpson(function(x){return Math.pow(f(x),2)-Math.pow(g(x),2)},a,b,N);fo="V = π ∫ ([f(x)]² − [g(x)]²) dx"}
+    else{I=2*simpson(function(x){return x*f(x)},a,b,N);fo="V = 2π ∫ x·f(x) dx"}
+    var V=I*Math.PI,ex=exact(I);
+    draw(m,f,g,a,b);
+    $("rv").textContent="V = "+(ex||V.toFixed(4));
+    $("rs").textContent=(ex?"≈ "+V.toFixed(4)+" ":"")+"unidades cúbicas";
+    $("rc").textContent=NAMES[m]+" · "+$("f").value+(m==="washer"?" y "+$("g").value:"");
+    $("rf").textContent=fo+", x de "+$("a").value+" a "+$("b").value}
+  catch(e){$("err").textContent=/^(Undefined|Value|Unexpected|Parenthesis)/.test(e.message||"")?"Expresión no válida. Revisa los paréntesis y símbolos.":(e.message||"Expresión no válida.")}}
+
+function draw(m,f,g,a,b){
+  if(!window.Plotly)throw new Error("No se pudo cargar la librería de gráficas. Revisa tu conexión y recarga la página.");
+  var cs=getComputedStyle(document.documentElement),ink=cs.getPropertyValue("--ink").trim(),line=cs.getPropertyValue("--line").trim(),ac=cs.getPropertyValue("--ac").trim();
+  var NX=70,NT=73,th=[],xs=[],i,j;
+  for(i=0;i<NT;i++)th.push(2*Math.PI*i/(NT-1));for(i=0;i<NX;i++)xs.push(a+(b-a)*i/(NX-1));
+  function solid(rf,shell,fill,lc,op){
+    var X=[],Y=[],Z=[],P=[];
+    th.forEach(function(t){var rx=[],ry=[],rz=[],pr=[];xs.forEach(function(x){var r=rf(x),p;
+      if(shell)p=[x*Math.cos(t),r,x*Math.sin(t)];else{r=Math.abs(r);p=[x,r*Math.cos(t),r*Math.sin(t)]}
+      rx.push(p[0]);ry.push(p[1]);rz.push(p[2]);pr.push(p)});X.push(rx);Y.push(ry);Z.push(rz);P.push(pr)});
+    var lx=[],ly=[],lz=[];
+    function seg(arr){arr.forEach(function(p){lx.push(p[0]);ly.push(p[1]);lz.push(p[2])});lx.push(null);ly.push(null);lz.push(null)}
+    for(j=0;j<NX;j+=6)seg(P.map(function(row){return row[j]}));
+    seg(P.map(function(row){return row[NX-1]}));
+    for(i=0;i<NT-1;i+=6)seg(P[i]);
+    return[{type:"surface",x:X,y:Y,z:Z,colorscale:[[0,fill],[1,fill]],showscale:false,opacity:op,hoverinfo:"skip",lighting:{ambient:.9,diffuse:.3,specular:.05,roughness:.95}},
+      {type:"scatter3d",mode:"lines",x:lx,y:ly,z:lz,line:{color:lc,width:2},hoverinfo:"skip",showlegend:false}]}
+  var d=[],pad=(b-a)*0.12,axis;
+  if(m==="washer"){d=d.concat(solid(f,false,"#4f6bff",ac,0.3),solid(g,false,"#12236e","#12236e",0.55))}
+  else d=d.concat(solid(f,m==="shell","#4f6bff",ac,0.45));
+  if(m==="shell"){var lo=0,hi=0;xs.forEach(function(x){var y=f(x);lo=Math.min(lo,y);hi=Math.max(hi,y)});var p2=(hi-lo)*0.12||1;axis={x:[0,0],y:[lo-p2,hi+p2],z:[0,0]}}
+  else axis={x:[a-pad,b+pad],y:[0,0],z:[0,0]};
+  d.push({type:"scatter3d",mode:"lines",x:axis.x,y:axis.y,z:axis.z,line:{color:ink,width:6},hoverinfo:"skip",showlegend:false});
+  var ax=function(t){return{title:t,color:ink,gridcolor:line,zerolinecolor:line,backgroundcolor:"rgba(0,0,0,0)"}};
+  Plotly.react("plot",d,{paper_bgcolor:"rgba(0,0,0,0)",margin:{l:0,r:0,t:0,b:0},font:{family:"Times New Roman, Times, serif",color:ink,size:14},
+    scene:{xaxis:ax(m==="shell"?"x":"x (eje)"),yaxis:ax(m==="shell"?"y (eje)":"y"),zaxis:ax("z"),aspectmode:"data"}},{responsive:true,displaylogo:false})}
+
+if(hasS())show(true);
+})();
+</script>
+</body>
+</html>
