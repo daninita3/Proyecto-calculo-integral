@@ -8,4 +8,4 @@ Primera versión en [solidosV1.py](solidosV1.py).
 Aún así, para facilitar el acceso a este proyecto se pensó en la idea de desarrollar una página Web, ya que no todo el mundo tiene las herramientas para descargar un IDE como Visual Studio Code y ejecutar el código, se considera más sencillo el acceso a él por medio de una página Web o una APP, nuestro grupo prefirió el desarrollo de la Web.
 
 Aprovechamos la función de "pages" que es nativa de github para poder desarrollar una URL para lograr un mayor alcance con este proyecto.
-https://daninita3.github.io/Proyecto-c-lculo-integral/
+https://daninita3.github.io/Proyecto-calculo-integral/
